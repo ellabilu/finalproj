@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Profile</title>
+    <link href='https://fonts.googleapis.com/css?family=Hanken Grotesk' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+        body {
+            font-family: 'Hanken Grotesk', Arial, sans-serif;
+            display: flex;
+        }
+        .image-container {
+            flex: 1;
+            background-image: url('https://images.pexels.com/photos/34950/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+        }
+        .profile-container {
+            flex: 1;
+            background-color: #1B3D6D;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 50px;
+        }
+        .profile-details {
+            max-width: 400px;
+            width: 100%;
+        }
+        h1, h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        label {
+            color: white;
+        }
+        .user-info {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+        }
+        button[type="button"] {
+            width: 100%;
+            padding: 10px;
+            background-color: blue;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button[type="button"]:hover {
+            background-color: red;
+        }
+        .home-icon {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: white;
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+  <div class="image-container"></div>
+  <div class="profile-container">
+    <div class="profile-details">
+      <i class="fas fa-user home-icon"></i>
+      <h1>Welcome, [Username]!</h1>
+      <h2>Your Profile</h2>
+      <div class="user-info">
+        <label>Username:</label>
+        <p>[Username]</p>
+      </div>
+      <div class="user-info">
+        <label>Email:</label>
+        <p>[Email]</p>
+      </div>
+      <button type="button" onclick="logout()">Logout</button>
+    </div>
+  </div>
+  <script>
+    function logout() {
+      // Implement logout functionality here
+      window.location.href = '/logout';
+    }
+  </script>
+</body>
+</html>

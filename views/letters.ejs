@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Letters to Congress Tutorial</title>
+    <link href='https://fonts.googleapis.com/css?family=Hanken Grotesk' rel='stylesheet'>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="navbar">
+    <a href="/">Home</a>
+    <div class="dropdown">
+        <a href="#">Letters</a>
+        <div class="dropdown-content">
+            <a href="/newsletters">Newsletters</a>
+            <a href="/letters">Writing a Letter</a>
+        </div>
+    </div>
+    <a href="/opportunities">Opportunities</a>
+    <a href="/about">About</a>
+    <a href='/login'><i class="fas fa-user person-icon"></i></a>
+</header>
+<h1>Writing Letters to Elected Officials</h1>
+<p class="padding">Click on the buttons below to learn more about letter writing.</p>
+<div class="buttons-container">
+    <div class="round-box" onclick="showPopup(generateWhyText())">Why?</div>
+    <div class="round-box" onclick="showPopup(generateWhoText())">Who?</div>
+    <div class="round-box" onclick="showPopup(generateWhereText())">Where?</div>
+    <div class="round-box" onclick="showPopup(generateWhatText())">What?</div>
+</div>
+
+
+<div id="popup" class="popup">
+    <div class="popup-content">
+        <span class="close" onclick="hidePopup()">&times;</span>
+        <div id="popupText" class="popup-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed commodo, lectus id ullamcorper blandit, dui lorem ultrices lacus, eget convallis ligula nisl non leo.</div>
+    </div>
+</div>
+
+<div class="container">
+    <button class="carousel-button left" onclick="prevSlide()">&#10094;</button>
+    <div class="carousel" id="carousel">
+        <div class="box" id="introduction">
+            <h2>INTRODUCTION</h2>
+            <p>Introduce yourself by stating your name, city, and any groups you are part of. Clearly state your request and explain why it is important to you and the community, keeping your message personal.</p>
+        </div>
+        <div class="box" id="fight">
+            <h2>ADVOCATE</h2>
+            <p>When advocating for your cause, explain why the issue is pressing and provide relevant statistics and evidence to support your argument. Be enthusiastic and engaged, aiming to educate and persuade the reader without being overly aggressive.</p>
+        </div>
+        <div class="box" id="conclude">
+            <h2>CONCLUDE</h2>
+            <p> Try to relate the issue to the bigger picture and how supporting your cause will support your community. Also, thank the official for their time and consideration. Finally, sign off with your name and address (especially when emailing your personal official; this helps prioritize your letter over those from individuals they don’t represent).</p>
+        </div>
+        <div class="box" id="extra">
+            <h2>Extra</h2>
+            <p>Explore additional tips, resources, and strategies for writing impactful letters to congress.</p>
+        </div>
+    </div>
+    <button class="carousel-button right" onclick="nextSlide()">&#10095;</button>
+</div>
+<hr class="dark-blue-hr">
+<div class="dark-blue-section">
+    <div class="center-button">
+        <button onclick="showUploadForm()">Upload File</button>
+    </div>
+
+    <div id="uploadFormOverlay"></div>
+
+    <div id="uploadForm">
+        <button class="close-button" onclick="hideUploadForm()">X</button>
+        <h3>Upload Form</h3>
+        <form id="fileUploadForm" enctype="multipart/form-data" action="/submit-letter" method="POST">
+            <label for="topic">Topic:</label><br>
+            <input type="text" id="topic" name="topic" required><br>
+            <label for="link">Link:</label><br>
+            <input type="text" id="link" name="link" required><br>
+            <label for="who">Who:</label><br>
+            <input type="text" id="who" name="who" required><br>
+            <label for="fileInput">Choose a file:</label><br>
+            <input type="file" name="fileInput" id="fileInput" accept=".pdf,.doc,.docx" required><br>
+            <label for="deleteUpload">
+                <input type="checkbox" id="deleteUpload" name="deleteUpload">
+                I acknowledge that admin reserves the right to delete an upload at any time
+            </label>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <div class="submitted-forms" id="submittedFormsContainer">
+    </div>
+</div>
+
+<script>
+    // Function to show the upload form and overlay
+    function showUploadForm() {
+        document.getElementById('uploadForm').style.display = 'block';
+        document.getElementById('uploadFormOverlay').classList.add('show');
+    }
+
+    // Function to hide the upload form and overlay
+    function hideUploadForm() {
+        document.getElementById('uploadForm').style.display = 'none';
+        document.getElementById('uploadFormOverlay').classList.remove('show');
+    }
+
+    // Function to submit the form
+//    document.getElementById('fileUploadForm').addEventListener('submit', function (event) {
+//        event.preventDefault();
+//
+//        const topic = document.getElementById('topic').value;
+//        const link = document.getElementById('link').value;
+//        const who = document.getElementById('who').value;
+//        const fileInput = document.getElementById('fileInput');
+//        const file = fileInput.files[0];
+//
+//        if (file) {
+//            const reader = new FileReader();
+//            reader.readAsDataURL(file);
+//            reader.onload = function () {
+//                const submittedFormsContainer = document.getElementById('submittedFormsContainer');
+//                const formSquare = document.createElement('div');
+//                formSquare.classList.add('form-square');
+//
+//                formSquare.innerHTML = `
+//                    <p><strong>Topic:</strong> ${topic}</p>
+//                    <p><strong>Link:</strong> <a href="${link}" target="_blank">${link}</a></p>
+//                    <p><strong>Who:</strong> ${who}</p>
+//                    <p><strong>File:</strong> <a href="${reader.result}" download="${file.name}">${file.name}</a></p>
+//                    <button onclick="deleteForm(this)">Delete</button>
+//                `;
+//
+//                submittedFormsContainer.appendChild(formSquare);
+//            };
+//        }
+//
+//        hideUploadForm();
+//
+//        // Clear form fields after submission
+//        document.getElementById('topic').value = '';
+//        document.getElementById('link').value = '';
+//        document.getElementById('who').value = '';
+//        document.getElementById('fileInput').value = '';
+//    });
+
+    // Function to delete the form
+    function deleteForm(element) {
+        const formSquare = element.parentElement;
+        formSquare.remove();
+    }
+
+function showForm(index) {
+        const carouselSlide = document.getElementById('carouselSlide');
+        const forms = carouselSlide.getElementsByClassName('form-square');
+        if (forms.length === 0) return;
+
+        for (let i = 0; i < forms.length; i++) {
+            forms[i].style.display = 'none';
+        }
+
+        forms[index].style.display = 'block';
+    }
+
+  let currentIndex = 0;
+
+    function showSlide(index) {
+        const slides = document.querySelectorAll('.carousel .box');
+        if (index >= slides.length) {
+            currentIndex = 0;
+        } else if (index < 0) {
+            currentIndex = slides.length - 1;
+        } else {
+            currentIndex = index;
+        }
+        const offset = -currentIndex * 100;
+        document.getElementById('carousel').style.transform = `translateX(${offset}%)`;
+    }
+
+    function nextSlide() {
+        showSlide(currentIndex + 1);
+    }
+
+    function prevSlide() {
+        showSlide(currentIndex - 1);
+    }
+function generateWhyText() {
+    return "Why is letter writing important? Writing letters to elected officials is a great way to let your opinion be known to your representative. Their job is to represent not just their own opinion, but the population that they serve. The ACLU makes a great point in their guide to letter writing, saying, “Many legislators believe that a letter represents not only the position of the writer but also many other constituents who did not take the time to write.”";
+}
+
+function generateWhoText() {
+    return "Who text.";
+}
+
+function generateWhereText() {
+    return "Where text.";
+}
+
+function generateWhatText() {
+    return "What text.";
+}
+
+function showPopup(text) {
+    var popup = document.getElementById('popup');
+    var popupText = document.getElementById('popupText');
+    popup.style.display = "block";
+    popupText.textContent = text;
+}
+
+
+function hidePopup() {
+    var popup = document.getElementById('popup');
+    popup.style.display = "none";
+}
+
+</script>
+</body>
+</html>
+
+

@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opportunities</title>
+    <link href='https://fonts.googleapis.com/css?family=Hanken Grotesk' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> <!-- Add Font Awesome library -->
+    <style>
+        body {
+            background-color: #B0CDF5; /* Light blue background */
+            font-family: 'Hanken Grotesk', Arial, sans-serif; /* Use Hanken Grotesk font */
+            margin: 0;
+            padding: 0;
+        }
+
+        .fas.fa-user.person-icon {
+            font-size: 24px;
+        }
+.general-description {
+    font-style: italic;
+    color: white;
+    text-align: center;
+        }
+         h1 {
+        color: #1B3D6D;
+        text-align: center;
+        margin-top: 100px; /* Increased margin to accommodate the navbar */
+        font-weight: bold;
+        position: relative; /* Add position relative */
+        z-index: 2; /* Set higher z-index to ensure visibility above navbar */
+        font-size: 64px;
+    }
+
+    /* Adjusted margin for the navbar to leave space for the h1 */
+    .navbar {
+        background-color: #1B3D6D;
+        color: white;
+        padding: 20px;
+        position: fixed;
+        width: 100%;
+        top: 0;
+        left: 0;
+        z-index: 1;
+    }
+
+        /* Opportunity tiles styling */
+        .opportunity-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 20px;
+        }
+        .opportunity-tile {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 20px;
+            margin: 10px;
+            width: calc(33.333% - 40px); /* To fit 3 tiles per row */
+            background-color: #f9f9f9;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            cursor: pointer; /* Add cursor pointer */
+        }
+        .opportunity-tile:hover {
+            transform: translateY(-5px);
+        }
+        .opportunity-tile img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+        .opportunity-tile h3 {
+            margin-top: 0;
+            font-size: 18px;
+            color: #333;
+        }
+        .opportunity-tile p {
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* Modal styling */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto; /* 15% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; /* Could be more or less, depending on screen size */
+            max-width: 600px; /* Max width for modal */
+            border-radius: 5px;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        
+
+        .navbar a {
+            color: white; /* Set link color to white */
+            text-decoration: none; /* Remove underline from links */
+            margin: 0 10px; /* Add some spacing between links */
+        }
+
+        .person-icon {
+            position: absolute; /* Position the person icon */
+            top: 20px; /* Adjust the distance from the top edge */
+        }
+
+        .navbar .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #1B3D6D;
+            min-width: 160px;
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            color: white;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+#sortDropdown {
+    background-color: #1B3D6D;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: block; /* Change display to block */
+    margin: 0 auto; /* Remove this line */
+}
+
+.opportunity-container {
+    display: flex; /* Add flex display */
+    justify-content: center; /* Center items horizontally */
+    align-items: center; /* Center items vertically */
+    flex-wrap: wrap; /* Allow items to wrap */
+}
+    </style>
+</head>
+<body>
+ <div class="navbar">
+        <a href="/">Home</a>
+        <div class="dropdown">
+            <a href="#">Letters</a>
+            <div class="dropdown-content">
+                <a href="/newsletters">Newsletters</a>
+                <a href="/letters">Writing a Letter</a>
+            </div>
+        </div>
+        <a href="/opportunities">Opportunities</a>
+        <a href="/about">About</a>
+        <a href='/login'><i class="fas fa-user person-icon"></i></a> <!-- Font Awesome person icon -->
+    </div>
+
+    <h1>Opportunities</h1>
+<p class="general-description">Explore various opportunities to engage in community service, leadership, and advocacy initiatives.</p><p class="general-description"> Discover events, programs, and projects that align with your interests and values.</p>
+ <select id="sortDropdown">
+    <option value="default">Sort by:</option>
+    <option value="az">A to Z</option>
+</select>
+    <div id="opportunity-container" class="opportunity-container">
+        <!-- Static opportunities from server-side rendering -->
+        <% for (let i = 0; i < opps.length; i++) { %>
+            <div class="opportunity-tile" onclick='openModal(<%= JSON.stringify(opps[i]) %>)'>
+                <p>Opportunity: <%= opps[i].name %></p>
+                <p>Organization: <%= opps[i].organization %></p>
+                <p>Date: <%= new Date(opps[i].date).toLocaleDateString() %></p>
+            </div>
+        <% } %>
+    </div>
+
+    <!-- The Modal -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="modal-content-details">
+                <!-- Dynamic content will be injected here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Fetch opportunity data from the server
+        async function fetchOpportunities() {
+            try {
+                const response = await fetch('/opportunities');
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('Error fetching opportunities:', error);
+                return [];
+            }
+        }
+
+        // Function to generate HTML for an opportunity tile
+        function createOpportunityTile(opportunity) {
+            return `
+                <div class="opportunity-tile" onclick='openModal(${JSON.stringify(opportunity)})'>
+                    <img src="${opportunity.photo}" alt="${opportunity.name}">
+                    <h3>${opportunity.name}</h3>
+                    <p><strong>Organization:</strong> ${opportunity.organization}</p>
+                    <p
+><strong>Applicable To:</strong> ${opportunity.applicableTo.join(', ')}</p>
+                    <p><strong>Date:</strong> ${new Date(opportunity.date).toLocaleDateString()}</p>
+                    <p><strong>Uploaded By:</strong> ${opportunity.uploadedBy}</p>
+                </div>
+            `;
+        }
+
+        // Function to render opportunity tiles onto the page
+        async function renderOpportunities() {
+            const container = document.getElementById("opportunity-container");
+            const opportunities = await fetchOpportunities();
+            opportunities.forEach(opportunity => {
+                const tile = createOpportunityTile(opportunity);
+                container.innerHTML += tile;
+            });
+        }
+
+        // Function to open the modal with detailed opportunity information
+        function openModal(opportunity) {
+            const modal = document.getElementById("myModal");
+            const content = `
+                <h3>${opportunity.name}</h3>
+                <img src="${opportunity.photo}" alt="${opportunity.name}">
+                <p><strong>Organization:</strong> ${opportunity.organization}</p>
+                <p><strong>Applicable To:</strong> ${opportunity.applicableTo.join(', ')}</p>
+                <p><strong>Date:</strong> ${new Date(opportunity.date).toLocaleDateString()}</p>
+                <p><strong>Uploaded By:</strong> ${opportunity.uploadedBy}</p>
+                <p><strong>Tags:</strong> ${opportunity.tags.join(', ')}</p>
+                <p>${opportunity.description}</p>
+            `;
+            document.getElementById("modal-content-details").innerHTML = content;
+            modal.style.display = "block";
+        }
+
+        // Function to close the modal
+        function closeModal() {
+            const modal = document.getElementById("myModal");
+            modal.style.display = "none";
+        }
+
+        // Close the modal when clicking outside of it
+        window.onclick = function(event) {
+            const modal = document.getElementById('myModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // Handle form submission
+        document.getElementById('opportunity-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const data = Object.fromEntries(formData.entries());
+
+            data.applicableTo = data.applicableTo.split(',');
+            data.tags = data.tags.split(',');
+
+            try {
+                const response = await fetch('/opportunities', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                if (response.ok) {
+                    alert('Opportunity added successfully!');
+                    event.target.reset();
+                } else {
+                    alert('Error adding opportunity');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error adding opportunity');
+            }
+        });
+
+
+        // Attach event listener to the search input
+        document.getElementById('searchInput').addEventListener('input', filterOpportunities);
+        document.getElementById('openFormButton').addEventListener('click', function() {
+            document.getElementById('formContainer').style.display = 'block';
+        });
+    </script>
+</body>
+</html>
+
+
+
+
