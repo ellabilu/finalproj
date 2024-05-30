@@ -1,4 +1,4 @@
-import User from '../Models/User.js';
+import User from '../models/User.js';
 import Opportunity from '../models/Opportunity.js';
 import Letter from '../models/Letter.js';
 import multer from 'multer';
