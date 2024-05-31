@@ -7,16 +7,20 @@ import MongoStore from 'connect-mongo';
 import flash from 'connect-flash';
 import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
+import multer from 'multer';
+import sharp from 'sharp';
+import fs from 'fs';
+import path from 'path';
+import dotenv from 'dotenv';
 
-import dotenv from 'dotenv'; 
 dotenv.config({ path: './process.env' });
 
 const app = express();
-
+app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static('public'));
-app.set('view engine', 'ejs');
+app.use(express.static('uploads'));
 
 // Session setup
 app.use(session({
@@ -35,8 +39,8 @@ app.use(flash());
 
 // Middleware to make flash messages available to all views
 app.use((req, res, next) => {
-    res.locals.flashMessages = req.flash();
-    next();
+  res.locals.flashMessages = req.flash();
+  next();
 });
 
 // Connect to MongoDB
@@ -48,32 +52,20 @@ mongoose.connect(process.env.MONGO_URL)
     console.error('Error connecting to MongoDB:', err);
   });
 
-// Define routes
-import routes from './routes/routes.js'; 
-app.use('/', routes);
-
-const PORT = process.env.PORT || 3000; 
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
-
 // Configure the local strategy
 passport.use(new LocalStrategy(
   function(username, password, done) {
-    // Find the user by username
     User.findOne({ username: username })
-  .then(user => {
-    if (!user) {
-      return done(null, false, { message: 'Incorrect username.' });
-    }
-    // Replace this condition with your logic to check the password
-    if (user.password !== password) {
-      return done(null, false, { message: 'Incorrect password.' });
-    }
-    return done(null, user);
-  })
-  .catch(err => done(err));
-
+      .then(user => {
+        if (!user) {
+          return done(null, false, { message: 'Incorrect username.' });
+        }
+        if (user.password !== password) {
+          return done(null, false, { message: 'Incorrect password.' });
+        }
+        return done(null, user);
+      })
+      .catch(err => done(err));
   }
 ));
 
@@ -88,79 +80,106 @@ passport.deserializeUser(function(id, done) {
   });
 });
 
-// Your other app configurations and routes here
+// File upload setup with Multer and Sharp
+const storage = multer.memoryStorage();
 
-/*app.post('/login', (req, res, next) => {
-  passport.authenticate('local', (err, user, info) => {
-    if (err) {
-      return next(err);
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype === 'application/pdf' || file.mimetype.startsWith('image/')) {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+};
+
+const upload = multer({ storage: storage, fileFilter: fileFilter });
+
+if (!fs.existsSync('uploads')) {
+  fs.mkdirSync('uploads');
+}
+
+const dataFilePath = path.join('uploads', 'data.json');
+
+// Helper function to read data from the JSON file
+const readData = () => {
+  if (fs.existsSync(dataFilePath)) {
+    const fileData = fs.readFileSync(dataFilePath);
+    return JSON.parse(fileData);
+  }
+  return [];
+};
+
+// Helper function to write data to the JSON file
+const writeData = (data) => {
+  fs.writeFileSync(dataFilePath, JSON.stringify(data, null, 2));
+};
+
+// Routes for file upload and rendering upload page
+app.get('/', (req, res) => {
+  try {
+    const files = readData();
+    res.render('upload', { files: files });
+  } catch (err) {
+    console.error('Error rendering upload page:', err);
+    res.status(500).send('Server error');
+  }
+});
+
+app.post('/upload', upload.single('file'), async (req, res) => {
+  if (!req.file) {
+    return res.status(400).send('No file uploaded or file type not allowed.');
+  }
+
+  const fileName = req.file.originalname.split('.')[0] + '-' + Date.now() + path.extname(req.file.originalname);
+  const filePath = path.join('uploads', fileName);
+
+  try {
+    if (req.file.mimetype.startsWith('image/')) {
+      await sharp(req.file.buffer)
+        .resize(300)
+        .toFile(filePath);
+    } else {
+      fs.writeFileSync(filePath, req.file.buffer);
     }
-    if (!user) {
-      req.flash('error', info.message);
-      return res.redirect('/login');
-    }
-    req.logIn(user, (err) => {
-      if (err) {
-        return next(err);
-      }
-      req.flash('success', 'Logged in successfully!');
-      return res.redirect('/');
-    });
-  })(req, res, next);
-});*/
 
+    const newEntry = {
+      topic: req.body.topic,
+      link: req.body.link,
+      who: req.body.who,
+      fileName: fileName
+    };
 
+    const data = readData();
+    data.push(newEntry);
+    writeData(data);
 
-/*const app = express();
+    res.redirect('/');
+  } catch (error) {
+    console.error('Error processing file:', error);
+    res.status(500).send('Error processing file');
+  }
+});
 
-// Connect to MongoDB
-mongoose.connect(process.env.MONGO_URL)
-  .then(() => {
-    console.log('Connected to MongoDB');
-  })
-  .catch((err) => {
-    console.error('Error connecting to MongoDB:', err);
-  });
+app.delete('/delete/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    // Implement code to delete the entry/file with the specified ID
+    // For example, if you're using Mongoose for MongoDB:
+    await Letter.findByIdAndDelete(id);
+    res.status(200).json({ message: 'Entry deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting entry:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
 
-
-
-
-app.use(express.urlencoded({ extended: true }));
-app.use(express.static('public'));
-app.set('view engine', 'ejs');
-
-
-
-// Define routes
-import routes from './routes/routes.js'; 
+// Define other routes
+import routes from './routes/routes.js';
 app.use('/', routes);
 
-const PORT = process.env.PORT || 3000; 
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
 
 
-app.use(express.json());
 
-
-/*app.use(session({
-  secret: 'secret',
-  resave: false,
-  saveUninitialized: true,
-  store: MongoStore.create({ mongoUrl: process.env.MONGO_URL })
-}));
-*/
-
-// Route to handle POST requests to create opportunities
-/*app.post('/api/opportunities', async (req, res) => {
-  try {
-    const opportunity = new Opportunity(req.body);
-    await opportunity.save();
-    res.status(201).json(opportunity);
-  } catch (error) {
-    console.error('Error creating opportunity:', error);
-    res.status(500).json({ error: 'Failed to create opportunity' });
-  }
-});
-*/

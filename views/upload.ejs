@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Letters</title>
+    <link href='https://fonts.googleapis.com/css?family=Hanken Grotesk' rel='stylesheet'>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+/* Add this to your existing styles or modify as needed */
+.upload-form {
+    background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    width: 300px; /* Adjust width as needed */
+    margin: auto; /* Center the form */
+}
+
+.upload-form h2 {
+    margin: 0 0 20px;
+    color: #0056b3; /* Dark blue text */
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    color: #0056b3; /* Dark blue text */
+}
+
+.form-group input[type="text"],
+.form-group input[type="file"] {
+    width: calc(100% - 20px); /* Adjust width to account for padding */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent white background */
+}
+
+.submit-button, .show-form-button {
+    background-color: #007bff; /* Light blue button */
+    color: #fff; /* White text */
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.submit-button:hover, .show-form-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* Dark blue background for uploaded files */
+.tiles-container {
+    padding: 20px;
+}
+
+.tile {
+    background-color: #f9f9f9; /* Light blue background for tiles */
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-top: 20px; /* Add some space between tiles */
+    width: calc(33.333% - 40px);
+    box-sizing: border-box;
+}
+
+.tile h3 {
+    margin-top: 0;
+    color: #0056b3; /* Dark blue text */
+}
+
+.tile p {
+    margin: 5px 0;
+    color: #0056b3; /* Dark blue text */
+}
+
+.tile a {
+    color: #007bff; /* Light blue link */
+    text-decoration: none;
+}
+
+.tile a:hover {
+    text-decoration: underline;
+}
+
+.background-image {
+    background-image: url('https://images.pexels.com/photos/1375261/pexels-photo-1375261.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'); /* Background image */
+    background-size: cover;
+    background-position: center;
+    padding-top: 10px;
+}
+.background-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(128, 128, 128, 0.3); /* Semi-transparent grey overlay */
+}
+
+    </style>
+</head>
+<body>
+    <header class="navbar">
+        <a href="/">Home</a>
+        <div class="dropdown">
+            <a href="#">Letters</a>
+            <div class="dropdown-content">
+                <a href="/newsletters">Newsletters</a>
+                <a href="/letters">Writing a Letter</a>
+                <a href="/">Upload Your Letter</a>
+            </div>
+        </div>
+        <a href="/opportunities">Opportunities</a>
+        <a href="/about">About</a>
+        <a href='/login'><i class="fas fa-user person-icon"></i></a>
+    </header>
+    <div class="background-image">
+       <div class="background-overlay"></div>
+        <h1>Upload Your Letter to Elected Officials</h1>
+        <p class="padding">Share your letter as a template for others to use! Add a link to the cause and who to send the letter to as well.</p>
+        <div class="dark-blue-section">
+            <form id="fileUploadForm" enctype="multipart/form-data" action="/upload" method="POST" class="upload-form hidden">
+                <h2>Upload a File</h2>
+                <div class="form-group">
+                    <label for="topic">Topic:</label>
+                    <input type="text" id="topic" name="topic" required style="width: calc(100% - 20px);">
+                </div>
+                <div class="form-group">
+                    <label for="link">Link:</label>
+<input type="text" id="link" name="link" required style="width: calc(100% - 20px);">
+</div>
+<div class="form-group">
+<label for="who">Who:</label>
+<input type="text" id="who" name="who" required style="width: calc(100% - 20px);">
+</div>
+<div class="form-group">
+<label for="file">Choose a File:</label>
+<input type="file" name="file" id="file" required style="width: calc(100% - 20px);">
+</div>
+<button type="submit" class="submit-button">Upload</button>
+</form>
+</div>
+</div>
+<!-- Tiles Section -->
+<div class="tiles-container">
+    <% if (files && files.length) { %>
+        <% files.forEach(function(file) { %>
+            <div class="tile">
+                <h3 style="color: #0056b3;"><a href="/<%= file.fileName %>" target="_blank"><%= file.fileName.split('-')[0] %>.<%= file.fileName.split('.')[1] %></a></h3>
+                <p style="color: #0056b3;"><strong>Topic:</strong> <%= file.topic %></p>
+                <p style="color: #0056b3;"><strong>Link:</strong> <a href="<%= file.link %>" target="_blank"><%= file.link %></a></p>
+                <p style="color: #0056b3;"><strong>Who:</strong> <%= file.who %></p>
+                <!-- Delete Button within Form -->
+                <form id="deleteForm<%= file.id %>" action="/delete/<%= file.id %>" method="POST">
+    <button type="button" onclick="deleteFile('<%= file.id %>')" class="delete-button" style="background-color: #fff; color: #0056b3; border: 1px solid #0056b3;">Delete</button>
+</form>
+            </div>
+        <% }); %>
+    <% } else { %>
+        <p>No files uploaded yet.</p>
+    <% } %>
+</div>
+
+<script>
+function deleteFile(fileId) {
+    if (confirm("Are you sure you want to delete this file?")) {
+        document.getElementById("deleteForm" + fileId).submit();
+    }
+}
+</script>
+    </body>
+</html>
+                    
+                    
+                    
+
+
+

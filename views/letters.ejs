@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!--<!DOCTYPE html>-->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -15,6 +15,7 @@
         <div class="dropdown-content">
             <a href="/newsletters">Newsletters</a>
             <a href="/letters">Writing a Letter</a>
+            <a href="/">Upload Your Letter</a>
         </div>
     </div>
     <a href="/opportunities">Opportunities</a>
@@ -60,37 +61,8 @@
     </div>
     <button class="carousel-button right" onclick="nextSlide()">&#10095;</button>
 </div>
-<hr class="dark-blue-hr">
-<div class="dark-blue-section">
-    <div class="center-button">
-        <button onclick="showUploadForm()">Upload File</button>
-    </div>
 
-    <div id="uploadFormOverlay"></div>
 
-    <div id="uploadForm">
-        <button class="close-button" onclick="hideUploadForm()">X</button>
-        <h3>Upload Form</h3>
-        <form id="fileUploadForm" enctype="multipart/form-data" action="/submit-letter" method="POST">
-            <label for="topic">Topic:</label><br>
-            <input type="text" id="topic" name="topic" required><br>
-            <label for="link">Link:</label><br>
-            <input type="text" id="link" name="link" required><br>
-            <label for="who">Who:</label><br>
-            <input type="text" id="who" name="who" required><br>
-            <label for="fileInput">Choose a file:</label><br>
-            <input type="file" name="fileInput" id="fileInput" accept=".pdf,.doc,.docx" required><br>
-            <label for="deleteUpload">
-                <input type="checkbox" id="deleteUpload" name="deleteUpload">
-                I acknowledge that admin reserves the right to delete an upload at any time
-            </label>
-            <button type="submit">Submit</button>
-        </form>
-    </div>
-
-    <div class="submitted-forms" id="submittedFormsContainer">
-    </div>
-</div>
 
 <script>
     // Function to show the upload form and overlay
