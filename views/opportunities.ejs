@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Opportunities</title>
-    <link href='https://fonts.googleapis.com/css?family=Hanken Grotesk' rel='stylesheet'>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> <!-- Add Font Awesome library -->
+    <link href='https://fonts.googleapis.com/css?family=Hanken+Grotesk' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         body {
-            background-color: #B0CDF5; /* Light blue background */
-            font-family: 'Hanken Grotesk', Arial, sans-serif; /* Use Hanken Grotesk font */
+            background-color: #B0CDF5;
+            font-family: 'Hanken Grotesk', Arial, sans-serif;
             margin: 0;
             padding: 0;
         }
@@ -17,115 +17,47 @@
         .fas.fa-user.person-icon {
             font-size: 24px;
         }
-.general-description {
-    font-style: italic;
-    color: white;
-    text-align: center;
-        }
-         h1 {
-        color: #1B3D6D;
-        text-align: center;
-        margin-top: 100px; /* Increased margin to accommodate the navbar */
-        font-weight: bold;
-        position: relative; /* Add position relative */
-        z-index: 2; /* Set higher z-index to ensure visibility above navbar */
-        font-size: 64px;
-    }
 
-    /* Adjusted margin for the navbar to leave space for the h1 */
-    .navbar {
-        background-color: #1B3D6D;
-        color: white;
-        padding: 20px;
-        position: fixed;
-        width: 100%;
-        top: 0;
-        left: 0;
-        z-index: 1;
-    }
-
-        /* Opportunity tiles styling */
-        .opportunity-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            padding: 20px;
-        }
-        .opportunity-tile {
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 20px;
-            margin: 10px;
-            width: calc(33.333% - 40px); /* To fit 3 tiles per row */
-            background-color: #f9f9f9;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-            cursor: pointer; /* Add cursor pointer */
-        }
-        .opportunity-tile:hover {
-            transform: translateY(-5px);
-        }
-        .opportunity-tile img {
-            max-width: 100%;
-            height: auto;
-            margin-bottom: 10px;
-            border-radius: 5px;
-        }
-        .opportunity-tile h3 {
-            margin-top: 0;
-            font-size: 18px;
-            color: #333;
-        }
-        .opportunity-tile p {
-            margin-bottom: 8px;
-            font-size: 14px;
-            color: #666;
+        .general-description {
+            font-style: italic;
+            color: white;
+            text-align: center;
+            margin: 0 20px;
         }
 
-        /* Modal styling */
-        .modal {
-            display: none; /* Hidden by default */
-            position: fixed; /* Stay in place */
-            z-index: 1; /* Sit on top */
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto; /* Enable scroll if needed */
-            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-        }
-        .modal-content {
-            background-color: #fefefe;
-            margin: 15% auto; /* 15% from the top and centered */
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%; /* Could be more or less, depending on screen size */
-            max-width: 600px; /* Max width for modal */
-            border-radius: 5px;
-        }
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
+        h1 {
+            color: #1B3D6D;
+            text-align: center;
+            margin-top: 100px;
             font-weight: bold;
+            position: relative;
+            z-index: 2;
+            font-size: 48px;
         }
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
+
+        .navbar {
+            background-color: #1B3D6D;
+            color: white;
+            padding: 20px;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        
 
         .navbar a {
-            color: white; /* Set link color to white */
-            text-decoration: none; /* Remove underline from links */
-            margin: 0 10px; /* Add some spacing between links */
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+            transition: color 0.3s;
         }
 
-        .person-icon {
-            position: absolute; /* Position the person icon */
-            top: 20px; /* Adjust the distance from the top edge */
+        .navbar a:hover {
+            color: #B0CDF5;
         }
 
         .navbar .dropdown {
@@ -156,27 +88,177 @@
         .dropdown:hover .dropdown-content {
             display: block;
         }
-#sortDropdown {
-    background-color: #1B3D6D;
-    color: white;
-    border: none;
-    padding: 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    display: block; /* Change display to block */
-    margin: 0 auto; /* Remove this line */
-}
 
-.opportunity-container {
-    display: flex; /* Add flex display */
-    justify-content: center; /* Center items horizontally */
-    align-items: center; /* Center items vertically */
-    flex-wrap: wrap; /* Allow items to wrap */
-}
+        .person-icon {
+            position: absolute;
+            top: 20px;
+        }
+
+        .opportunity-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .opportunity-tile {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 20px;
+            margin: 10px;
+            width: calc(33.333% - 40px);
+            background-color: #f9f9f9;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .opportunity-tile:hover {
+            transform: translateY(-5px);
+        }
+
+        .opportunity-tile img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+
+        .opportunity-tile h3 {
+            margin-top: 0;
+            font-size: 18px;
+            color: #333;
+        }
+
+        .opportunity-tile p {
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 5px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        #sortDropdown {
+            background-color: #1B3D6D;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 20px auto;
+            display: block;
+        }
+
+        .form-container {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .form-container form {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .form-container form label {
+            display: block;
+            margin-bottom: 5px;
+            color: #1B3D6D;
+            font-weight: bold;
+        }
+
+        .form-container form input,
+        .form-container form textarea,
+        .form-container form button {
+            width: calc(100% - 24px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .form-container form button {
+            background-color: #1B3D6D;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .form-container form button:hover {
+            background-color: #0f2a4d;
+        }
+
+        .search-container {
+            text-align: center;
+            margin: 20px;
+        }
+
+        .search-container input {
+            padding: 10px;
+            width: calc(100% - 24px);
+            max-width: 400px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        .search-container button {
+            padding: 10px;
+            border: none;
+            background-color: #1B3D6D;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .search-container button:hover {
+            background-color: #0f2a4d;
+        }
     </style>
 </head>
 <body>
- <div class="navbar">
+    <div class="navbar">
         <a href="/">Home</a>
         <div class="dropdown">
             <a href="#">Letters</a>
@@ -187,17 +269,51 @@
         </div>
         <a href="/opportunities">Opportunities</a>
         <a href="/about">About</a>
-        <a href='/login'><i class="fas fa-user person-icon"></i></a> <!-- Font Awesome person icon -->
+        <a href="/login"><i class="fas fa-user person-icon"></i></a>
     </div>
 
     <h1>Opportunities</h1>
-<p class="general-description">Explore various opportunities to engage in community service, leadership, and advocacy initiatives.</p><p class="general-description"> Discover events, programs, and projects that align with your interests and values.</p>
- <select id="sortDropdown">
-    <option value="default">Sort by:</option>
-    <option value="az">A to Z</option>
-</select>
+    <p class="general-description">Explore various opportunities to engage in community service, leadership, and advocacy initiatives.</p>
+    <p class="general-description">Discover events, programs, and projects that align with your interests and values.</p>
+
+    <div class="form-container">
+        <form id="opportunity-form">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="organization">Organization:</label>
+            <input type="text" id="organization" name="organization" required>
+
+            <label for="date">Date:</label>
+            <input type="date" id="date" name="date" required>
+
+            <label for="photo">Photo:</label>
+            <input type="file" id="photo" name="photo" accept="image/*" required>
+
+            <label for="applicableTo">Applicable To:</label>
+            <input type="text" id="applicableTo" name="applicableTo" required>
+
+            <label for="tags">Tags:</label>
+            <input type="text" id="tags" name="tags" required>
+
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" required></textarea>
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Search opportunities...">
+        <button onclick="searchOpportunities()">Search</button>
+    </div>
+
+    <select id="sortDropdown">
+        <option value="default">Sort by:</option>
+        <option value="az">A to Z</option>
+    </select>
+
     <div id="opportunity-container" class="opportunity-container">
-        <!-- Static opportunities from server-side rendering -->
         <% for (let i = 0; i < opps.length; i++) { %>
             <div class="opportunity-tile" onclick='openModal(<%= JSON.stringify(opps[i]) %>)'>
                 <p>Opportunity: <%= opps[i].name %></p>
@@ -207,18 +323,14 @@
         <% } %>
     </div>
 
-    <!-- The Modal -->
     <div id="myModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
-            <div id="modal-content-details">
-                <!-- Dynamic content will be injected here -->
-            </div>
+            <div id="modal-content-details"></div>
         </div>
     </div>
 
     <script>
-        // Fetch opportunity data from the server
         async function fetchOpportunities() {
             try {
                 const response = await fetch('/opportunities');
@@ -230,22 +342,19 @@
             }
         }
 
-        // Function to generate HTML for an opportunity tile
         function createOpportunityTile(opportunity) {
             return `
                 <div class="opportunity-tile" onclick='openModal(${JSON.stringify(opportunity)})'>
                     <img src="${opportunity.photo}" alt="${opportunity.name}">
                     <h3>${opportunity.name}</h3>
                     <p><strong>Organization:</strong> ${opportunity.organization}</p>
-                    <p
-><strong>Applicable To:</strong> ${opportunity.applicableTo.join(', ')}</p>
+                    <p><strong>Applicable To:</strong> ${opportunity.applicableTo.join(', ')}</p>
                     <p><strong>Date:</strong> ${new Date(opportunity.date).toLocaleDateString()}</p>
                     <p><strong>Uploaded By:</strong> ${opportunity.uploadedBy}</p>
                 </div>
             `;
         }
 
-        // Function to render opportunity tiles onto the page
         async function renderOpportunities() {
             const container = document.getElementById("opportunity-container");
             const opportunities = await fetchOpportunities();
@@ -255,7 +364,6 @@
             });
         }
 
-        // Function to open the modal with detailed opportunity information
         function openModal(opportunity) {
             const modal = document.getElementById("myModal");
             const content = `
@@ -272,13 +380,11 @@
             modal.style.display = "block";
         }
 
-        // Function to close the modal
         function closeModal() {
             const modal = document.getElementById("myModal");
             modal.style.display = "none";
         }
 
-        // Close the modal when clicking outside of it
         window.onclick = function(event) {
             const modal = document.getElementById('myModal');
             if (event.target == modal) {
@@ -286,7 +392,6 @@
             }
         }
 
-        // Handle form submission
         document.getElementById('opportunity-form').addEventListener('submit', async (event) => {
             event.preventDefault();
             const formData = new FormData(event.target);
@@ -315,8 +420,6 @@
             }
         });
 
-
-        // Attach event listener to the search input
         document.getElementById('searchInput').addEventListener('input', filterOpportunities);
         document.getElementById('openFormButton').addEventListener('click', function() {
             document.getElementById('formContainer').style.display = 'block';

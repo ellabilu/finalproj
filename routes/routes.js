@@ -2,11 +2,15 @@ import express from 'express';
 import * as ctrl from '../controllers/mainController.js';
 import * as auth from '../controllers/authController.js';
 
-import Opportunity from '../models/Opportunity.js';  // Adjusted path
+import Opportunity from '../models/Opportunity.js';
 import Letter from '../models/Letter.js';
 import multer from 'multer';
+import methodOverride from 'method-override';
 
 const router = express.Router();
+
+// Middleware to handle method override
+router.use(methodOverride('_method'));
 
 // Route to add a new opportunity
 router.post('/opportunities', async (req, res) => {
@@ -28,8 +32,6 @@ router.post('/opportunities', async (req, res) => {
         res.status(400).send({ error: 'Error creating opportunity' });
     }
 });
-
-
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -67,6 +69,22 @@ router.post('/api/letters', upload.single('file'), async (req, res) => {
     }
 });
 
+// Delete route for letters
+router.delete('/delete/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const deletedLetter = await Letter.findByIdAndDelete(id);
+
+        if (!deletedLetter) {
+            return res.status(404).json({ error: 'Letter not found' });
+        }
+
+        res.status(200).json({ message: 'Letter deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting letter:', error);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
 
 
 // Define routes
@@ -77,11 +95,9 @@ router.get('/newsletters', (req, res) => {
 });
 
 router.get('/opportunities', ctrl.opps);
-
 router.get('/letters', (req, res) => {
-    res.render('letters'); // Render the newsletters page
+    res.render('letters'); // Render the letters page
 });
-
 
 router.post('/submit-letter', upload.single('fileInput'), ctrl.lettersubmit);
 
@@ -95,4 +111,5 @@ router.get('/logout', auth.logout);
 //router.post('/api/products', auth.isAuthenticated, ctrl.getProducts);
 
 export default router;
+
 

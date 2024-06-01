@@ -12,6 +12,8 @@ import sharp from 'sharp';
 import fs from 'fs';
 import path from 'path';
 import dotenv from 'dotenv';
+import methodOverride from 'method-override';
+
 
 dotenv.config({ path: './process.env' });
 
@@ -33,6 +35,9 @@ app.use(session({
 // Passport initialization
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.use(methodOverride('_method'));
+
 
 // Connect-flash setup
 app.use(flash());
@@ -113,8 +118,18 @@ const writeData = (data) => {
   fs.writeFileSync(dataFilePath, JSON.stringify(data, null, 2));
 };
 
-// Routes for file upload and rendering upload page
+// Routes for rendering index and upload pages
 app.get('/', (req, res) => {
+  try {
+    // Render index.ejs instead of upload.ejs
+    res.render('index');
+  } catch (err) {
+    console.error('Error rendering index page:', err);
+    res.status(500).send('Server error');
+  }
+});
+
+app.get('/upload', (req, res) => {
   try {
     const files = readData();
     res.render('upload', { files: files });

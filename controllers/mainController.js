@@ -6,8 +6,9 @@ import { fileURLToPath } from 'url';
 import path from 'path';
 import fs from 'fs';
 import sharp from 'sharp';
+import express from 'express';
 
-
+const router = express.Router();
 export const home = async (req, res) => {
   res.render('index', {title: 'Node Template'});
 };
@@ -19,23 +20,37 @@ export const about = (req, res) => {
 
 export const opps = async (req, res) => {
     try {
-        let opps = await Opportunity.find();
+        let opportunities = await Opportunity.find();
 
-        // Sort opportunities alphabetically if requested
-        const { sort } = req.query;
-        if (sort === 'az') {
-            opps = opps.sort((a, b) => a.name.localeCompare(b.name));
+        // Check if there's a search query
+        const { search } = req.query;
+        if (search) {
+            // Filter opportunities based on search query
+            opportunities = opportunities.filter(opportunity => 
+                opportunity.name.toLowerCase().includes(search.toLowerCase()) ||
+                opportunity.organization.toLowerCase().includes(search.toLowerCase()) ||
+                opportunity.description.toLowerCase().includes(search.toLowerCase()) ||
+                opportunity.tags.some(tag => tag.toLowerCase().includes(search.toLowerCase()))
+            );
         }
 
-        res.render('opportunities', { opps });
+        res.render('opportunities', { opps: opportunities });
     } catch (error) {
         console.error('Error fetching opportunities:', error);
-        res.status(500).send('Error fetching opportunities');
+        res.status(500).send('Server error');
     }
 };
 
-
-
+/*router.post('/opportunities', upload.none(), async (req, res) => {
+    try {
+        // Add your route logic here
+    } catch (error) {
+        console.error('Error creating opportunity:', error);
+        res.status(500).send('Server error');
+    }
+});
+export default router;
+*/
 export const lettersubmit = async (req, res) => {
     console.log(req.body);
     console.log("hi");
